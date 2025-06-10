@@ -7,6 +7,7 @@ items = [
     {"name": "Klaro - Ethiopia Flores", "quantity": 0.25,
         "unit": "kg", "unit_price": 236.00},
 ]
+sold_items = []
 
 
 def get_column_width(items, key, extra=2):
@@ -32,6 +33,21 @@ def get_items():
         )
 
 
+def get_sold_items():
+    name_width = get_column_width(items, "name", 2)  # dynamically form items
+    quantity_width = 10  # fixed for header
+    unit_width = 6  # fixed for header
+    unit_price_width = 18  # fixed for header
+
+    header = f"{'Name':<{name_width}}{'Quantity':<{quantity_width}}{'Unit':<{unit_width}}{'Unit Price (PLN)':<{unit_price_width}}"
+    print(header)
+    print('-' * (name_width + quantity_width + unit_width + unit_price_width))
+    for item in sold_items:
+        print(
+            f"{item['name']:<{name_width}}{str(item['quantity']):<{quantity_width}}{item['unit']:<{unit_width}}{str(item['unit_price']):<{unit_price_width}}"
+        )
+
+
 def add_item(name, unit_name, quantity, unit_price):
     new_item = {"name": name, "quantity": quantity,
                 "unit": unit_name, "unit_price": unit_price}
@@ -52,6 +68,24 @@ def get_item_by_name(name):
     for item in items:
         if item["name"] == name:
             return item
+
+
+def get_costs():
+    return sum(item["quantity"] * item["unit_price"] for item in items)
+
+
+def get_income():
+    return sum(sold_item["quantity"] * sold_item["unit_price"] for sold_item in sold_items)
+
+
+def show_revenue():
+    income = get_income()
+    costs = get_costs()
+    print("Revenue breakdown (PLN)")
+    print(f"Income: {income}")
+    print(f"Costs: {costs}")
+    print("---------------------")
+    print(f"Revenue: {income - costs}")
 
 
 def run_command(command):
@@ -87,9 +121,12 @@ def run_command(command):
             item_quantity = float(get_response_from_user("Quantity to sell: "))
         sell_item(item_name, item_quantity)
         item_unit_of_measure = get_item_by_name(item_name)["unit"]
+        sold_items.append(get_item_by_name(item_name))
         print(
             f"Successfully sold {item_quantity} {item_unit_of_measure} of {item_name}. Current status: ")
         get_items()
+    elif command == "show_revenue":
+        show_revenue()
 
 
 if __name__ == '__main__':
