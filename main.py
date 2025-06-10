@@ -1,3 +1,5 @@
+import csv
+import sys
 # items format [{name: x, quantity: i, unit: y, unit_price: j}]
 items = [
     {"name": "Coffeepro - Kostaryka El Mango",
@@ -82,10 +84,38 @@ def show_revenue():
     income = get_income()
     costs = get_costs()
     print("Revenue breakdown (PLN)")
-    print(f"Income: {income}")
-    print(f"Costs: {costs}")
+    print(f"Income: {round(income, 2)}")
+    print(f"Costs: {round(costs, 2)}")
     print("---------------------")
     print(f"Revenue: {income - costs}")
+
+
+def export_items_to_csv():
+    with open('magazyn.csv', 'w', newline='', encoding="utf8") as csvfile:
+        fieldnames = ['name', 'quantity', 'unit', "unit_price"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for item in items:
+            writer.writerow(item)
+
+
+def export_sales_to_csv():
+    with open('sales.csv', 'w', newline='', encoding="utf8") as csvfile:
+        fieldnames = ['name', 'quantity', 'unit', "unit_price"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for sold_item in sold_items:
+            writer.writerow(sold_item)
+
+
+def load_items_from_csv(path_to_csv_file='magazyn.csv'):
+    items.clear()
+    with open(path_to_csv_file, 'r', newline='', encoding="utf8") as csvfile:
+        fieldnames = ['name', 'quantity', 'unit', "unit_price"]
+        reader = csv.DictReader(csvfile, fieldnames=fieldnames)
+        for row in reader:
+            items.append(row)
+    print("Successfully loaded data from magazyn.csv")
 
 
 def run_command(command):
@@ -127,8 +157,16 @@ def run_command(command):
         get_items()
     elif command == "show_revenue":
         show_revenue()
+    elif command == "save":
+        export_items_to_csv()
+        export_sales_to_csv()
+        print("Successfully exported data to magazyn.csv and sales.csv.")
+    elif command == "load":
+        load_items_from_csv()
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        load_items_from_csv(sys.argv[1])
     while True:
         show_menu()
