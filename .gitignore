@@ -1,0 +1,20 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+
+build/
+dist/
+*.egg-info/
+
+# Flask
+instance/
+
+# IDE 
+.vscode/
+.idea/
+
