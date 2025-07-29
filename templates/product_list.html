@@ -6,7 +6,17 @@
     <button type="button" class="btn btn-light float-right">Export products</button>
 </div>
 
-<table class="table">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<ul class=flashes>
+    {% for category, message in messages %}
+    <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -14,6 +24,7 @@
             <th scope="col">Quantity</th>
             <th scope="col">Unit</th>
             <th scope="col">Unit price</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -24,8 +35,20 @@
             <td>{{ item.quantity }}</td>
             <td>{{ item.unit }}</td>
             <td>{{ item.unit_price }}</td>
+            <td></td>
         </tr>
         {% endfor %}
+        <tr>
+            <form method="POST" action="{{ url_for('product_list') }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <th scope="row"></th>
+                <td>{{ form.name(class="form-control") }}</td>
+                <td>{{ form.quantity(class="form-control") }}</td>
+                <td>{{ form.unit(class="form-control") }}</td>
+                <td>{{ form.unit_price(class="form-control") }}</td>
+                <td><button type="submit" name="submit" class="btn btn-light float-right">Add product</button></td>
+            </form>
+        </tr>
     </tbody>
 </table>
 
