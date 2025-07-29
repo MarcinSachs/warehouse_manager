@@ -2,8 +2,8 @@
 {% block content %}
 <h1>Products</h1>
 <div class="flex">
-    <button type="button" class="btn btn-light float-right">Load products</button>
-    <button type="button" class="btn btn-light float-right">Export products</button>
+    <a type="button" href="{{ url_for('load_products') }}" class="btn btn-light float-right">Load product</a>
+    <a type="button" href="{{ url_for('export_products') }}" class="btn btn-light float-right">Export product</a>
 </div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -28,14 +28,15 @@
         </tr>
     </thead>
     <tbody>
-        {% for item in items %}
+        {% for item in items.values() %}
         <tr>
             <th scope="row"></th>
             <td>{{ item.name }}</td>
             <td>{{ item.quantity }}</td>
             <td>{{ item.unit }}</td>
             <td>{{ item.unit_price }}</td>
-            <td></td>
+            <td><a type="button" href="{{ url_for('sell_product', product_name=item.name) }}"
+                    class="btn btn-light float-right">Sel product</a></td>
         </tr>
         {% endfor %}
         <tr>

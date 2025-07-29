@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Sell Product</h1>
+
+<form method="POST" action="{{ url_for('sell_product', product_name=product.name) }}">
+    {{ form.csrf_token }}
+    {{ form.product_name(value=product.name) }} {# Dodajemy ukryte pole #}
+    <div class="form-group">
+        <label for="quantity">Quantity to Sell:</label>
+        {{ form.quantity(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Sell</button>
+</form>
+
+<a href="{{ url_for('product_list') }}">Back to Product List</a>
+{% endblock %}

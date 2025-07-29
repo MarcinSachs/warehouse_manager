@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DecimalField
+from wtforms import StringField, SubmitField, DecimalField, HiddenField
 
 
 class ProductForm(FlaskForm):
@@ -8,3 +8,9 @@ class ProductForm(FlaskForm):
     unit = StringField('Unit')
     unit_price = DecimalField('Unit Price')
     submit = SubmitField('Add Product')
+
+
+class ProductSaleForm(FlaskForm):
+    quantity = DecimalField('Quantity')
+    product_name = HiddenField()
+    submit = SubmitField('Sell Product')
